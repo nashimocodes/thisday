@@ -1,3 +1,6 @@
+import streamlit as st
+import pandas as pd
+
 from requests import Session
 from streamlit.connections import ExperimentalBaseConnection
 
@@ -35,10 +38,24 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
         formatted_data = ThisDayData.from_dict(data.json())
         return formatted_data
 
+    def _convert_data_to_dataframe(self, data: ThisDayData) -> pd.DataFrame:
+        """
+        Converts the data to a pandas dataframe
+        """
+
+        for raw_data in data.events:
+            d = list()
+            for wikipedia in raw_data.wikipedia:
+                d.append(f"[{wikipedia.title}]({wikipedia.wikipedia})")
+
+            raw_data.wikipedia = " | ".join(d)
+
+        return pd.DataFrame(data.events)
+
     def query(self, date: int, month: int):
         """
         Fetches and returns all the data of the events which happened on the given day
         """
 
-        print("Querying the API")
-        return self._get_data_from_api(date, month)
+        api_data = self._get_data_from_api(date, month)
+        return self._convert_data_to_dataframe(api_data)
