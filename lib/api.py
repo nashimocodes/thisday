@@ -6,6 +6,11 @@ from streamlit.connections import ExperimentalBaseConnection
 
 from lib.types import ThisDayData
 
+st.set_page_config(
+    page_title="This Day in History",
+    page_icon="📅",
+)
+
 
 class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
     def __init__(

@@ -9,6 +9,7 @@ this_day_api_connection = ThisDayAPIConnection(
 input_date = st.date_input(
     "Enter the date you want to look in history for:",
     help="Year is not important, nor it is used.",
+    format="DD/MM/YYYY",
 )
 search_button = st.button("Lookup!")
 
