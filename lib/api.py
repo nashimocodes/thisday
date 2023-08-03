@@ -1,7 +1,6 @@
-import requests
-
 from requests import Session
 from streamlit.connections import ExperimentalBaseConnection
+
 
 class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
     def __init__(self, connection_name: str, **kwargs) -> None:
@@ -13,3 +12,24 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
         Create and return a new session connection.
         """
         return Session()
+
+    def cursor(self):
+        """
+        Returns the underlying session as a cursor.
+        """
+
+        return self._resource
+
+    def _get_data_from_api(self, date: int, month: int):
+        """
+        Helper function to get data from the API
+        """
+
+        print("Getting data from the API")
+
+    def query(self, date: int, month: int):
+        """
+        Fetches and returns all the data of the events which happened on the given day
+        """
+
+        print("Querying the API")
