@@ -1,10 +1,14 @@
 from requests import Session
 from streamlit.connections import ExperimentalBaseConnection
 
+from lib.types import ThisDayData
+
 
 class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
-    def __init__(self, connection_name: str, **kwargs) -> None:
-        super().__init__(self, connection_name, **kwargs)
+    def __init__(
+        self, *args, connection_name: str = "somerandomconnectionname", **kwargs
+    ) -> None:
+        super().__init__(*args, connection_name=connection_name, **kwargs)
         self._resource = self._connect()
 
     def _connect(self) -> Session:
@@ -20,7 +24,7 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
 
         return self._resource
 
-    def _get_data_from_api(self, date: int, month: int):
+    def _get_data_from_api(self, date: int, month: int) -> ThisDayData:
         """
         Helper function to get data from the API
         """
@@ -28,8 +32,8 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
             f"https://byabbe.se/on-this-day/{month}/{date}/events.json"
         )
 
-        print(data)
-        return data
+        formatted_data = ThisDayData.from_dict(data.json())
+        return formatted_data
 
     def query(self, date: int, month: int):
         """
@@ -37,3 +41,4 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
         """
 
         print("Querying the API")
+        return self._get_data_from_api(date, month)
