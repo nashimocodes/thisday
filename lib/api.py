@@ -62,10 +62,11 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
 
         return df
 
-    def query(self, date: int, month: int):
+    @st.cache_data(ttl=60 * 60 * 24)  # cache data for 24 hours
+    def query(_self, date: int, month: int):
         """
         Fetches and returns all the data of the events which happened on the given day
         """
 
-        api_data = self._get_data_from_api(date, month)
-        return self._convert_data_to_dataframe(api_data)
+        api_data = _self._get_data_from_api(date, month)
+        return _self._convert_data_to_dataframe(api_data)
