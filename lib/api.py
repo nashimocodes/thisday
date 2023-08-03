@@ -50,7 +50,17 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
 
             raw_data.wikipedia = " | ".join(d)
 
-        return pd.DataFrame(data.events)
+        df = pd.DataFrame(data.events)
+        df.rename(
+            columns={
+                "year": "Year",
+                "description": "Event Description",
+                "wikipedia": "Wikipedia Link(s)",
+            },
+            inplace=True,
+        )
+
+        return df
 
     def query(self, date: int, month: int):
         """
