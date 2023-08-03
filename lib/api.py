@@ -24,8 +24,12 @@ class ThisDayAPIConnection(ExperimentalBaseConnection[Session]):
         """
         Helper function to get data from the API
         """
+        data = self._resource.get(
+            f"https://byabbe.se/on-this-day/{month}/{date}/events.json"
+        )
 
-        print("Getting data from the API")
+        print(data)
+        return data
 
     def query(self, date: int, month: int):
         """
